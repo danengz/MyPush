@@ -1,29 +1,33 @@
 package com.yu.mypush;
 
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.SurfaceView;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
-
+    private LivePusher livePusher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Example of a call to a native method
-        TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+        SurfaceView surfaceView = findViewById(R.id.surfaceView);
+        livePusher = new LivePusher(this, 1920, 1080, 800_000, 10, Camera.CameraInfo.CAMERA_FACING_BACK);
+        //  设置摄像头预览的界面
+        livePusher.setPreviewDisplay(surfaceView.getHolder());
+
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
+    public void switchCamera(View view) {
+        livePusher.switchCamera();
+    }
+
+    public void startLive(View view) {
+    }
+
+    public void stopLive(View view) {
+    }
 }
