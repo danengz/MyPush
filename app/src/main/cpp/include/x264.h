@@ -24,7 +24,7 @@
  * This program is also available under a commercial proprietary license.
  * For more information, contact us at licensing@x264.com.
  *****************************************************************************/
-
+#include <stdint.h>
 #ifndef X264_X264_H
 #define X264_X264_H
 
