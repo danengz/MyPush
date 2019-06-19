@@ -15,6 +15,7 @@ public class LivePusher {
 
     public LivePusher(Activity activity, int width, int height, int bitrate,
                       int fps, int cameraId) {
+        //对native层的VideoChannel进行初始化
         native_init();
         videoChannel = new VideoChannel(this, activity, width, height, bitrate, fps, cameraId);
         audioChannel = new AudioChannel(this);
