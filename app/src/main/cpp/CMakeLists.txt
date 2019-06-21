@@ -29,4 +29,5 @@ target_link_libraries( # Specifies the target library.
         native-lib
         rtmp
         ${log-lib}
-        x264)
+        x264
+        faac)
