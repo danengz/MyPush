@@ -43,6 +43,7 @@ public class LivePusher {
     public void startLive(String path) {
         native_start(path);
         videoChannel.startLive();
+        audioChannel.startLive();
     }
 
     /**
@@ -50,6 +51,7 @@ public class LivePusher {
      */
     public void stopLive() {
         videoChannel.stopLive();
+        audioChannel.stopLive();
     }
 
     public native void native_init();
@@ -59,5 +61,11 @@ public class LivePusher {
     public native void native_start(String path);
 
     public native void native_pushVideo(byte[] data);
+
+    public native void native_setAudioEncInfo(int i, int channels);
+
+    public native int getInputSamples();
+
+    public native void native_pushAudio(byte[] bytes);
 
 }

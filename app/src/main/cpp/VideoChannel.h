@@ -13,6 +13,7 @@ class VideoChannel {
 
 public:
     void setVideoEncInfo(int width, int height, int fps, int bitrate);
+    ~VideoChannel();
     void encodeData(int8_t *data);
     void setVideoCallback(VideoCallback videoCallback);
 private:

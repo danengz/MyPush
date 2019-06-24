@@ -12,7 +12,9 @@ add_library( # Sets the name of the library.
         # Provides a relative path to your source file(s).
         native-lib.cpp
 
-        VideoChannel.cpp)
+        VideoChannel.cpp
+
+        AudioChannel.cpp)
 
 include_directories(include) #这个路径是相对CMakeLists.text的dir，不同版本AS中初始CMakeLists路径不同，这里有可能不同，比如会是include_directories(src/main/cpp/include)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}" ) #CMAKE_CXX_FLAGS会被添加到build.ninja的FLAGS中，ANDROID_ABI是内置变量，不要直接写死armeabi-v7a

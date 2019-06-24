@@ -6,8 +6,10 @@
 #include "pthread.h"
 #include "macro.h"
 #include "safe_queue.h"
+#include "AudioChannel.h"
 
 VideoChannel *videoChannel;//编码专用，会回调编码之后的RTMPPacket
+AudioChannel *audioChannel;
 int isStart = 0;//为了防止用户重复点击开始直播，导致重新初始化
 pthread_t pid; //连接服务器的线程
 uint32_t start_time;//开始推流时间戳
@@ -127,6 +129,9 @@ Java_com_yu_mypush_LivePusher_native_1init(JNIEnv *env, jobject instance) {
     videoChannel = new VideoChannel;
     //设置回调，因为VideoChannel只负责编码，这里拿到编码之后的数据进行传输
     videoChannel->setVideoCallback(callback);
+
+    audioChannel = new AudioChannel;
+    audioChannel->setAudioCallback(callback);
 }
 
 
@@ -198,4 +203,52 @@ Java_com_yu_mypush_LivePusher_native_1pushVideo(JNIEnv *env, jobject instance, j
     videoChannel->encodeData(data);
 
     env->ReleaseByteArrayElements(data_, data, 0);
+}
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_yu_mypush_LivePusher_native_1setAudioEncInfo(JNIEnv *env, jobject instance, jint sampleRateInHz,
+                                                      jint channels) {
+
+    if (audioChannel) {
+        audioChannel->setAudioEncInfo(sampleRateInHz, channels);
+    }
+
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_yu_mypush_LivePusher_getInputSamples(JNIEnv *env, jobject instance) {
+
+    if (audioChannel) {
+        return audioChannel->getInputSamples();
+    }
+    return -1;
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_yu_mypush_LivePusher_native_1pushAudio(JNIEnv *env, jobject instance, jbyteArray bytes_) {
+    jbyte *bytes = env->GetByteArrayElements(bytes_, NULL);
+
+    //    pcm
+    jbyte *data = env->GetByteArrayElements(bytes_, NULL);
+    if (!audioChannel || !readyPushing) {
+        return;
+    }
+    audioChannel->encodeData(data);
+    env->ReleaseByteArrayElements(bytes_, data, 0);
+
+    env->ReleaseByteArrayElements(bytes_, bytes, 0);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_yu_mypush_LivePusher_native_1release(JNIEnv *env, jobject instance) {
+
+    DELETE(videoChannel);
+    DELETE(audioChannel);
+
 }

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchCamera(View view) {
-        livePusher.switchCamera();
+
     }
 
     public void startLive(View view) {
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopLive(View view) {
-        livePusher.stopLive();
+
     }
+
 }
